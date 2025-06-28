@@ -3,6 +3,8 @@ package com.ogame.automation.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,10 +30,12 @@ public class Task {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "universe_id", nullable = false)
+    @JsonBackReference("universe-tasks")
     private Universe universe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bot_id")
+    @JsonBackReference("bot-tasks")
     private Bot bot;
 
     @Size(max = 100)
@@ -60,6 +64,7 @@ public class Task {
     private LocalDateTime finishedAt;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("task-results")
     private List<TaskResult> results;
 
     public enum TaskType {

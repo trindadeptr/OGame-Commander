@@ -1,8 +1,10 @@
 package com.ogame.automation.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,9 +39,11 @@ public class Universe {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "universe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("universe-bots")
     private List<Bot> bots;
 
     @OneToMany(mappedBy = "universe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("universe-tasks")
     private List<Task> tasks;
 
     // Constructors

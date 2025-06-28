@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +26,7 @@ public class Bot {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "universe_id", nullable = false)
+    @JsonBackReference
     private Universe universe;
 
     @Size(max = 100)
@@ -39,6 +42,7 @@ public class Bot {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "bot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Task> tasks;
 
     // Constructors
