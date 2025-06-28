@@ -143,6 +143,9 @@ ogame-automation/
 │   └── README.md
 ├── frontend/                   # Angular application (planned)
 ├── bot/                       # Tampermonkey scripts (planned)
+├── scripts/                   # Database and utility scripts
+│   ├── setup-database.sql    # Complete database initialization
+│   └── README.md             # Scripts documentation
 ├── docs/                      # Project documentation
 │   ├── requirements.md        # Full requirements specification
 │   ├── auth.md               # Authentication details
