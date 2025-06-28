@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.9
+    container_name: ogame-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ogame
+      MYSQL_USER: ogame_user
+      MYSQL_PASSWORD: example
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./backend/src/main/resources/schema-mariadb.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - ogame-network
+
+  backend:
+    build: ./backend
+    container_name: ogame-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/ogame
+      SPRING_DATASOURCE_USERNAME: ogame_user
+      SPRING_DATASOURCE_PASSWORD: example
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - ogame-network
+
+volumes:
+  mariadb_data:
+
+networks:
+  ogame-network:
+    driver: bridge
