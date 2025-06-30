@@ -4,7 +4,8 @@ Run locally:
 ```bash
 cd frontend
 npm install
-ng serve
+npm start
+# or: ng serve --proxy-config proxy.conf.json
 ```
 Open `http://localhost:4200`
 
