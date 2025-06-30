@@ -1,0 +1,6 @@
+<div class="p-4 container mx-auto" *ngIf="task">
+  <h2 class="text-2xl font-bold mb-4">Task {{ task.id }}</h2>
+  <p><strong>Type:</strong> {{ task.type }}</p>
+  <p><strong>Status:</strong> {{ task.status }}</p>
+  <p><strong>Result:</strong> {{ task.fullResult || task.errorMessage }}</p>
+</div>

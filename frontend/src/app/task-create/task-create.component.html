@@ -1,0 +1,35 @@
+<div class="p-4 max-w-md mx-auto">
+  <h2 class="text-2xl font-bold mb-4">Create Task</h2>
+  <form (ngSubmit)="create()">
+    <div class="mb-4">
+      <label class="block mb-1">Type</label>
+      <select
+        [(ngModel)]="type"
+        name="type"
+        class="border rounded w-full py-2 px-3"
+      >
+        <option value="CHECK_ACTIVITY">CHECK_ACTIVITY</option>
+        <option value="SPY_PLAYER">SPY_PLAYER</option>
+      </select>
+    </div>
+    <div class="mb-4">
+      <label class="block mb-1">Bot ID</label>
+      <input
+        [(ngModel)]="botId"
+        name="botId"
+        class="border rounded w-full py-2 px-3"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="block mb-1">Universe ID</label>
+      <input
+        [(ngModel)]="universeId"
+        name="universeId"
+        class="border rounded w-full py-2 px-3"
+      />
+    </div>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+      Create
+    </button>
+  </form>
+</div>

@@ -1,0 +1,32 @@
+<div class="p-4 container mx-auto">
+  <h2 class="text-2xl font-bold mb-4">Tasks</h2>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b">ID</th>
+          <th class="py-2 px-4 border-b">Type</th>
+          <th class="py-2 px-4 border-b">Status</th>
+          <th class="py-2 px-4 border-b"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks" class="hover:bg-gray-50">
+          <td class="py-2 px-4 border-b">{{ task.id }}</td>
+          <td class="py-2 px-4 border-b">{{ task.type }}</td>
+          <td class="py-2 px-4 border-b">{{ task.status }}</td>
+          <td class="py-2 px-4 border-b">
+            <a [routerLink]="['/tasks', task.id]" class="text-blue-500"
+              >Detail</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <a
+    routerLink="/tasks/create"
+    class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+    >Add Task</a
+  >
+</div>
