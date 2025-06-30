@@ -2,6 +2,7 @@ package com.ogame.automation.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ public class TaskResult {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
+    @JsonBackReference("task-results")
     private Task task;
 
     @NotNull
