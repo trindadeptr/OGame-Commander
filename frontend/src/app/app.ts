@@ -5,8 +5,7 @@ import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  templateUrl: './app.html'
 })
 export class App {
   constructor(
