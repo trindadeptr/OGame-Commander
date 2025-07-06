@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/universes")
 @Tag(name = "Universe Management", description = "Operations for managing OGame universes")
-@SecurityRequirement(name = "Bearer Authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class UniverseController {
 
     @Autowired

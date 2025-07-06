@@ -19,7 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/bots")
 @Tag(name = "Bot Management", description = "Operations for managing OGame automation bots")
-@SecurityRequirement(name = "Bearer Authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class BotController {
 
     @Autowired

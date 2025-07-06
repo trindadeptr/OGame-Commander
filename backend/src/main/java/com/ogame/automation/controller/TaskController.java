@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/tasks")
 @Tag(name = "Tasks", description = "Task management endpoints")
-@SecurityRequirement(name = "Bearer Authentication")
+@SecurityRequirement(name = "bearerAuth")
 public class TaskController {
 
     @Autowired
