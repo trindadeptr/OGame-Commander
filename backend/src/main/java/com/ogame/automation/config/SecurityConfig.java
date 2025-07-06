@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -41,7 +43,12 @@ public class SecurityConfig {
                 
                 // Admin only endpoints
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
-                .requestMatchers("/api/universes/**").hasRole("ADMIN")
+                
+                // Universe endpoints - authenticated users can view, but specific operations are restricted via @PreAuthorize
+                .requestMatchers("/api/universes/**").authenticated()
+                
+                // Bot endpoints - authenticated users can view, but specific operations are restricted via @PreAuthorize
+                .requestMatchers("/api/bots/**").authenticated()
                 
                 // Authenticated endpoints
                 .requestMatchers("/api/**").authenticated()
