@@ -106,13 +106,7 @@ curl -X GET http://localhost:8080/api/tasks \
 
 ## 🗄️ Database Configuration
 
-### Production (MariaDB)
-```properties
-Host: 192.168.0.10:3306
-Database: ogame_automation
-User: ogame_user
-Password: [configured]
-```
+
 
 ### Development (H2)
 ```bash
@@ -120,9 +114,7 @@ Password: [configured]
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-### Default Admin User
-- **Username**: `admin`
-- **Password**: `admin123`
+
 
 ## 📁 Project Structure
 
@@ -271,20 +263,20 @@ For questions, issues, or contributions:
 
 **Current Progress: ~40% Complete**
 
-| Component | Progress | Status |
-|-----------|----------|--------|
-| Backend Core | 95% | ✅ Complete |
-| Database Schema | 100% | ✅ Complete |
-| Authentication | 100% | ✅ Complete |
-| REST API | 80% | ✅ Functional |
-| Documentation | 90% | ✅ Complete |
-| Docker Setup | 100% | ✅ Complete |
-| Frontend | 0% | ❌ Not Started |
-| Bot Scripts | 0% | ❌ Not Started |
-| Deployment | 0% | ❌ Not Started |
+| Component | Progress | Status        |
+|-----------|----------|---------------|
+| Backend Core | 100%     | ✅ Complete    |
+| Database Schema | 100%     | ✅ Complete    |
+| Authentication | 100%     | ✅ Complete    |
+| REST API | 100%     | ✅ Complete    |
+| Documentation | 90%      | ✅ Complete    |
+| Docker Setup | 100%     | ✅ Complete    |
+| Frontend | 0%       | ❌ Not Started |
+| Bot Scripts | 0%       | ❌ Not Started |
+| Deployment | 0%       | ❌ Not Started |
 
 ---
 
-**Last Updated**: June 28, 2025  
-**Author**: Pedro (with AI assistance)  
+**Last Updated**: July 6, 2025  
+**Author**: Pedro Trindade (with AI assistance)  
 **Status**: Backend Phase Complete, Ready for Frontend Development

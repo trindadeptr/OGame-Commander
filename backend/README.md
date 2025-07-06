@@ -2,6 +2,10 @@
 
 Spring Boot backend for the OGame Task Automation System.
 
+## 🔒 Security Notice
+
+**This application uses environment variables for all sensitive configuration.** Never commit actual credentials to version control. See `SECURITY.md` for complete security setup instructions.
+
 ## Technology Stack
 
 - **Java 21** (Eclipse Temurin)
@@ -14,13 +18,17 @@ Spring Boot backend for the OGame Task Automation System.
 - **Maven** for build management
 - **Docker** with multi-stage builds
 
-## Database Configuration
+## Configuration
 
-The application connects to MariaDB with these settings:
-- Host: `192.168.0.10:3306`
-- Database: `ogame`
-- User: `ogame_user`
-- Password: `example`
+The application uses environment variables for configuration. See `SECURITY.md` for complete setup instructions.
+
+**Required Environment Variables:**
+- `DB_URL` - Database connection URL
+- `DB_USERNAME` - Database username  
+- `DB_PASSWORD` - Database password
+- `JWT_SECRET` - JWT signing secret (minimum 32 characters)
+
+Copy `.env.example` to `.env` and configure your values.
 
 ## Running the Application
 
@@ -33,6 +41,12 @@ The application connects to MariaDB with these settings:
 ### Local Development
 
 ```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit with your configuration
+nano .env
+
 # Build the application
 mvn clean install
 
@@ -45,11 +59,15 @@ The application will start on `http://localhost:8080`
 ### Docker
 
 ```bash
-# From project root directory
+# Copy environment template and configure
+cp .env.example .env
+nano .env
+
+# Start with Docker Compose (includes MariaDB)
 docker-compose up --build
 ```
 
-This will start both MariaDB and the backend application.
+This will start both MariaDB and the backend application with proper environment configuration.
 
 ### Docker Features
 
@@ -75,9 +93,9 @@ Once the application is running, you can access:
 
 The application creates a default admin user:
 - Username: `admin`
-- Password: `thisisjustanexamplepassword`
+- Password: `changeme`
 
-Note: change this password when app is in production!
+**⚠️ IMPORTANT:** Change this password immediately after first login in production!
 
 ### Login Process
 

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  ogame-backend:
+    build: .
+    container_name: ogame-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Database Configuration
+      - DB_URL=jdbc:mariadb://mariadb:3306/ogame
+      - DB_USERNAME=ogame_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=86400000
+      
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - ogame-network
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: ogame-mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=ogame
+      - MYSQL_USER=ogame_user
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./src/main/resources/schema-mariadb.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - ogame-network
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  ogame-network:
+    driver: bridge
