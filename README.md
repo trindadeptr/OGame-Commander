@@ -3,7 +3,7 @@
 A comprehensive multi-component automation solution for the OGame browser game, featuring a Spring Boot backend, Angular frontend, and Tampermonkey bot scripts for automated gameplay.
 
 ![Project Status](https://img.shields.io/badge/Status-Backend%20Complete-green)
-![Java](https://img.shields.io/badge/Java-17-orange)
+![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.0-brightgreen)
 ![Angular](https://img.shields.io/badge/Angular-17-red)
 
@@ -11,7 +11,7 @@ A comprehensive multi-component automation solution for the OGame browser game, 
 
 | Component | Technology Stack | Status | Path |
 |-----------|------------------|--------|------|
-| **Backend** | Java 17, Spring Boot 3, MariaDB, JWT | ✅ Complete (95%) | `/backend` |
+| **Backend** | Java 21, Spring Boot 3, MariaDB, JWT | ✅ Complete (95%) | `/backend` |
 | **Frontend** | Angular 17, TailwindCSS | ❌ Not Started | `/frontend` |
 | **Bot Scripts** | Tampermonkey (JavaScript) | ❌ Not Started | `/bot` |
 | **Database** | MariaDB 10.x | ✅ Complete | - |
@@ -21,7 +21,7 @@ A comprehensive multi-component automation solution for the OGame browser game, 
 
 ### Prerequisites
 
-- **Java 17** (Temurin recommended)
+- **Java 21** (Temurin recommended)
 - **Maven 3.6+**
 - **MariaDB 10.x** 
 - **Node.js** (for frontend development)

@@ -4,7 +4,7 @@ Spring Boot backend for the OGame Task Automation System.
 
 ## Technology Stack
 
-- **Java 17** (Temurin)
+- **Java 21** (Temurin)
 - **Spring Boot 3.2.0**
 - **Spring Security** with JWT authentication
 - **JPA/Hibernate** for database access
@@ -23,7 +23,7 @@ The application connects to MariaDB with these settings:
 
 ### Prerequisites
 
-1. Java 17 installed
+1. Java 21 installed
 2. MariaDB running with the database schema applied
 3. Database accessible at configured host
 

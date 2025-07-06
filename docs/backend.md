@@ -1,7 +1,7 @@
 # Backend (Spring Boot)
 
 ### Tech
-* Java 17 (Temurin)
+* Java 21 (Temurin)
 * Spring Boot 3 + Spring Security JWT
 * JPA / Hibernate
 * MariaDB

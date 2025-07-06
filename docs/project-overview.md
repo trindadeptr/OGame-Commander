@@ -9,7 +9,7 @@ A comprehensive task automation solution for the OGame browser game, consisting 
 ## Architecture
 
 ### Backend (Spring Boot 3)
-- **Framework**: Spring Boot 3.3.x with Java 17
+- **Framework**: Spring Boot 3.3.x with Java 21
 - **Database**: MariaDB production, H2 in-memory for testing
 - **Authentication**: JWT tokens with Spring Security
 - **API Documentation**: Swagger/OpenAPI 3
@@ -55,7 +55,7 @@ A comprehensive task automation solution for the OGame browser game, consisting 
 ## Development Environment
 
 ### Prerequisites
-- Java 17
+- Java 21
 - Maven 3.6+
 - MariaDB 10.x
 - Node.js (for frontend)

@@ -14,7 +14,7 @@ The OGame Task Automation project is a multi-component system designed to automa
 
 #### 1. Project Structure
 - Maven-based Spring Boot 3.3.0 project
-- Java 17 compatibility
+- Java 21 compatibility
 - Proper package structure (`com.ogame.automation`)
 
 #### 2. Database Schema & Entities
@@ -63,7 +63,7 @@ Backend:
 - MariaDB Driver
 - Swagger/OpenAPI 3
 - Maven 3.9.8
-- Java 17
+- Java 21
 
 Database:
 - MariaDB 10.x
