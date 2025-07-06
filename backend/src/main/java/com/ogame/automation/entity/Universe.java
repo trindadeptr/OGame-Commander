@@ -38,11 +38,11 @@ public class Universe {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "universe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "universe", fetch = FetchType.LAZY)
     @JsonManagedReference("universe-bots")
     private List<Bot> bots;
 
-    @OneToMany(mappedBy = "universe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "universe", fetch = FetchType.LAZY)
     @JsonManagedReference("universe-tasks")
     private List<Task> tasks;
 
