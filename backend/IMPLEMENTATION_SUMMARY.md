@@ -31,10 +31,9 @@ The backend is now **100% complete** and production-ready for the OGame automati
 - ✅ UniverseController - Universe management (admin only)
 - ✅ UserController - User management (admin only)
 
-**Configuration Layer (3/3)**
+**Configuration Layer (2/2)**
 - ✅ SecurityConfig - JWT security with role-based access
 - ✅ SwaggerConfig - API documentation
-- ✅ DataLoader - Default admin user initialization
 
 ### 🚀 **Key Features Implemented**
 
@@ -66,7 +65,7 @@ The backend is now **100% complete** and production-ready for the OGame automati
 - Automatic background task processing (every minute)
 - Stale task cleanup (every 5 minutes)
 - Daily maintenance scheduler (placeholder for data archival)
-- Default admin user creation on startup
+- Default admin user included in database schema
 
 ### 📊 **API Endpoints Summary**
 

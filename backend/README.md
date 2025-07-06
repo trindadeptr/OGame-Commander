@@ -77,6 +77,8 @@ The application creates a default admin user:
 - Username: `admin`
 - Password: `thisisjustanexamplepassword`
 
+Note: change this password when app is in production!
+
 ### Login Process
 
 1. POST to `/api/auth/login` with credentials
