@@ -4,6 +4,7 @@ import com.ogame.automation.entity.Universe;
 import com.ogame.automation.repository.BotRepository;
 import com.ogame.automation.repository.TaskRepository;
 import com.ogame.automation.repository.UniverseRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,6 +152,7 @@ public class UniverseService {
             return taskCount;
         }
 
+        @JsonProperty
         public boolean canBeDeleted() {
             return botCount == 0 && taskCount == 0;
         }

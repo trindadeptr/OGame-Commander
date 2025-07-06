@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDateTime;
@@ -39,11 +40,11 @@ public class Universe {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "universe", fetch = FetchType.LAZY)
-    @JsonManagedReference("universe-bots")
+    @JsonIgnore
     private List<Bot> bots;
 
     @OneToMany(mappedBy = "universe", fetch = FetchType.LAZY)
-    @JsonManagedReference("universe-tasks")
+    @JsonIgnore
     private List<Task> tasks;
 
     // Constructors
