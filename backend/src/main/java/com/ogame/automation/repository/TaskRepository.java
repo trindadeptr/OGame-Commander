@@ -40,4 +40,17 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findRecurringTasksToReschedule(@Param("now") LocalDateTime now);
     
     Optional<Task> findFirstByStatusAndUniverseIdOrderByCreatedAtAsc(Task.TaskStatus status, Long universeId);
+    
+    // Additional methods needed by TaskService
+    List<Task> findByStatus(Task.TaskStatus status);
+    
+    List<Task> findByUniverseId(Long universeId);
+    
+    List<Task> findByBotId(Long botId);
+    
+    List<Task> findByUniverseIdAndStatus(Long universeId, Task.TaskStatus status);
+    
+    List<Task> findByStatusAndNextExecutionAtBefore(Task.TaskStatus status, LocalDateTime dateTime);
+    
+    List<Task> findByStatusAndStartedAtBefore(Task.TaskStatus status, LocalDateTime dateTime);
 }
