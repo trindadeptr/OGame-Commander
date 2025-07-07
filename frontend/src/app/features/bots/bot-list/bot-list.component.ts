@@ -8,16 +8,80 @@ import { Bot } from '../../../core/models';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="container mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto">
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Bots</h1>
+        <div>
+          <h1 class="text-3xl font-bold text-white">Bot Monitoring</h1>
+          <p class="text-gray-400 mt-1">Monitor and manage your OGame automation bots</p>
+        </div>
         <button 
           (click)="refreshBots()" 
           [disabled]="isLoading"
           class="btn-primary">
-          <span *ngIf="isLoading" class="loading-spinner mr-2"></span>
-          Refresh
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+          <span>Add Bot</span>
         </button>
+      </div>
+
+      <!-- Metrics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div class="metric-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="metric-number">{{ bots.length }}</div>
+              <div class="metric-label">Total Bots</div>
+            </div>
+            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="metric-number">{{ getActiveBots() }}</div>
+              <div class="metric-label">Online</div>
+            </div>
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="metric-number">{{ getInactiveBots() }}</div>
+              <div class="metric-label">Offline</div>
+            </div>
+            <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="metric-number">{{ getWorkingBots() }}</div>
+              <div class="metric-label">Working</div>
+            </div>
+            <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Loading State -->
@@ -26,16 +90,27 @@ import { Bot } from '../../../core/models';
       </div>
 
       <!-- Error State -->
-      <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+      <div *ngIf="errorMessage" class="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded mb-6">
         {{ errorMessage }}
       </div>
 
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && !errorMessage && bots.length === 0" class="card">
+        <div class="flex flex-col items-center justify-center py-12">
+          <svg class="w-16 h-16 text-gray-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-400 mb-2">No bots registered</h3>
+          <p class="text-gray-500">Register your first bot to start automation</p>
+        </div>
+      </div>
+
       <!-- Bots Grid -->
-      <div *ngIf="!isLoading && !errorMessage" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngIf="!isLoading && !errorMessage && bots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let bot of bots" class="card">
           <div class="card-header">
             <div class="flex items-center justify-between">
-              <h3 class="text-lg font-semibold">{{ bot.name }}</h3>
+              <h3 class="text-lg font-semibold text-white">{{ bot.name }}</h3>
               <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                     [ngClass]="{
                       'bg-green-100 text-green-800': bot.status === 'ACTIVE',
@@ -48,83 +123,41 @@ import { Bot } from '../../../core/models';
           <div class="card-body">
             <div class="space-y-3">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Universe</label>
-                <p class="text-gray-900">{{ bot.universe.name }}</p>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Universe</label>
+                <p class="text-gray-200">{{ bot.universe.name }}</p>
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">UUID</label>
-                <p class="text-gray-900 font-mono text-sm break-all">{{ bot.uuid }}</p>
+                <label class="block text-sm font-medium text-gray-400 mb-1">UUID</label>
+                <p class="text-gray-200 font-mono text-sm break-all">{{ bot.uuid }}</p>
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Last Seen</label>
-                <p class="text-gray-900 text-sm">
+                <label class="block text-sm font-medium text-gray-400 mb-1">Last Seen</label>
+                <p class="text-gray-200 text-sm">
                   {{ bot.lastSeenAt | date:'medium' }}
-                  <span class="text-gray-500">({{ getTimeSinceLastSeen(bot.lastSeenAt) }})</span>
+                  <span class="text-gray-400">({{ getTimeSinceLastSeen(bot.lastSeenAt) }})</span>
                 </p>
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Created</label>
-                <p class="text-gray-900 text-sm">{{ bot.createdAt | date:'medium' }}</p>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Created</label>
+                <p class="text-gray-200 text-sm">{{ bot.createdAt | date:'medium' }}</p>
               </div>
               
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Universe URL</label>
+                <label class="block text-sm font-medium text-gray-400 mb-1">Universe URL</label>
                 <a [href]="bot.universe.url" 
                    target="_blank" 
-                   class="text-blue-600 hover:text-blue-900 text-sm break-all">
+                   class="text-blue-400 hover:text-blue-300 text-sm break-all">
                   {{ bot.universe.url }}
                 </a>
               </div>
             </div>
           </div>
         </div>
-        
-        <!-- Empty State -->
-        <div *ngIf="bots.length === 0" class="col-span-full">
-          <div class="text-center py-12">
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No bots found</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              No bots have been registered yet. Bots will appear here once they connect to the backend.
-            </p>
-          </div>
-        </div>
       </div>
 
-      <!-- Summary Statistics -->
-      <div *ngIf="bots.length > 0 && !isLoading" class="mt-8">
-        <div class="card">
-          <div class="card-header">
-            <h2 class="text-lg font-semibold">Bot Statistics</h2>
-          </div>
-          <div class="card-body">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-900">{{ bots.length }}</div>
-                <div class="text-sm text-gray-500">Total Bots</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ getActiveBots() }}</div>
-                <div class="text-sm text-gray-500">Active Bots</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-gray-600">{{ getInactiveBots() }}</div>
-                <div class="text-sm text-gray-500">Inactive Bots</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-blue-600">{{ getUniqueUniverses() }}</div>
-                <div class="text-sm text-gray-500">Universes</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   `
 })
@@ -190,5 +223,14 @@ export class BotListComponent implements OnInit {
   getUniqueUniverses(): number {
     const universeIds = new Set(this.bots.map(bot => bot.universe.id));
     return universeIds.size;
+  }
+
+  getWorkingBots(): number {
+    // Assuming working bots are those that are active and have been seen recently (within 10 minutes)
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    return this.bots.filter(bot => 
+      bot.status === 'ACTIVE' && 
+      new Date(bot.lastSeenAt) > tenMinutesAgo
+    ).length;
   }
 }
