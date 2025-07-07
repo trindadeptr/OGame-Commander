@@ -1,6 +1,6 @@
 # Frontend (Angular) - Implementation Complete
 
-A modern Angular 17 frontend application for the OGame Commander automation system featuring a professional dark theme, comprehensive task management, and admin interfaces.
+A modern Angular 20 frontend application for the OGame Commander automation system featuring a professional dark theme, comprehensive task management, and admin interfaces.
 
 ## 🚀 Current Status: 90% Complete
 
@@ -54,11 +54,13 @@ A modern Angular 17 frontend application for the OGame Commander automation syst
 ### 🛠 Technical Implementation
 
 #### Architecture
-- **Angular 17**: Latest version with standalone components
-- **TypeScript**: Strict mode configuration
-- **TailwindCSS**: Utility-first styling framework
-- **RxJS**: Reactive programming with observables
-- **ESBuild**: Fast development builds
+- **Angular 20.0.6**: Latest stable version with standalone components
+- **TypeScript 5.8.3**: Strict mode configuration
+- **TailwindCSS v4.1.11**: Latest utility-first styling framework
+- **RxJS 7.8.2**: Reactive programming with observables
+- **Angular CLI 20.0.5**: With ESBuild for fast development builds
+- **Node.js 20.19.3**: Latest LTS version
+- **npm 10.8.2**: Package manager
 
 #### Components Structure
 ```
@@ -91,7 +93,7 @@ src/app/
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Angular CLI 17+
+- Angular CLI 20+
 - Backend API running on `http://localhost:8080`
 
 ### Installation & Development

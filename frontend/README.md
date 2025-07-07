@@ -1,6 +1,6 @@
 # OGame Commander Frontend
 
-A modern Angular 17 frontend application for the OGame Commander automation system featuring a professional dark theme and comprehensive management interfaces. **Status: 90% Complete**
+A modern Angular 20 frontend application for the OGame Commander automation system featuring a professional dark theme and comprehensive management interfaces. **Status: 90% Complete**
 
 ## 🚀 Features
 
@@ -53,8 +53,8 @@ A modern Angular 17 frontend application for the OGame Commander automation syst
 
 ## 🛠 Technical Stack
 
-- **Framework**: Angular 17 with standalone components
-- **Styling**: TailwindCSS with dark theme customization
+- **Framework**: Angular 20 with standalone components
+- **Styling**: TailwindCSS v4 with dark theme customization
 - **Forms**: Reactive Forms with validation
 - **HTTP Client**: Angular HttpClient with interceptors
 - **Routing**: Angular Router with guards and lazy loading
@@ -66,7 +66,7 @@ A modern Angular 17 frontend application for the OGame Commander automation syst
 ## 📦 Prerequisites
 
 - Node.js 18+ and npm
-- Angular CLI 17+
+- Angular CLI 20+
 - Backend API running on `http://localhost:8080`
 
 ## 🚀 Quick Start

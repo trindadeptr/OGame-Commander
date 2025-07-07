@@ -5,14 +5,16 @@ A comprehensive multi-component automation solution for the OGame browser game, 
 ![Project Status](https://img.shields.io/badge/Status-Frontend%20Complete-green)
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.0-brightgreen)
-![Angular](https://img.shields.io/badge/Angular-17-red)
+![Angular](https://img.shields.io/badge/Angular-20.0.6-red)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4.1.11-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)
 
 ## 🏗️ Architecture Overview
 
 | Component | Technology Stack | Status | Path |
 |-----------|------------------|--------|------|
 | **Backend** | Java 21, Spring Boot 3, MariaDB, JWT | ✅ Complete (95%) | `/backend` |
-| **Frontend** | Angular 17, TailwindCSS, Dark Theme | ✅ Complete (90%) | `/frontend` |
+| **Frontend** | Angular 20, TailwindCSS v4, Dark Theme | ✅ Complete (90%) | `/frontend` |
 | **Bot Scripts** | Tampermonkey (JavaScript) | ❌ Not Started | `/bot` |
 | **Database** | MariaDB 10.x | ✅ Complete | - |
 | **Documentation** | Markdown | ✅ Complete | `/docs` |
@@ -173,7 +175,7 @@ ogame-automation/
 - [x] Testing and validation
 
 ### Phase 2: Frontend Development ✅
-- [x] Angular 17 application setup with standalone components
+- [x] Angular 20 application setup with standalone components
 - [x] TailwindCSS dark theme styling framework
 - [x] Authentication service with JWT handling and guards
 - [x] Task management interface with filtering and metrics
@@ -234,6 +236,7 @@ Detailed documentation is available in the `/docs` folder:
 - **[Database Schema](docs/database.md)** - MariaDB configuration
 - **[Authentication](docs/auth.md)** - JWT implementation details
 - **[Progress Report](docs/PROJECT_PROGRESS.md)** - Current development status
+- **[Technology Stack Update](docs/TECH_STACK_UPDATE.md)** - Latest versions verification
 
 ## 🧪 Testing
 
