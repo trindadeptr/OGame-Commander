@@ -26,23 +26,19 @@ WORKDIR /app
 # Copy the built jar from build stage
 COPY --from=build /app/target/ogame-automation-backend-1.0.0.jar app.jar
 
-# Create non-root user for security
+# Create non-root user for security and install wget for health check in single layer
 RUN addgroup -g 1001 -S appgroup && \
-    adduser -S -D -H -u 1001 -s /sbin/nologin -G appgroup appuser
+    adduser -S -D -H -u 1001 -s /sbin/nologin -G appgroup appuser && \
+    apk add --no-cache wget
 
 USER appuser
 
 # Expose port
 EXPOSE 8080
 
-# Install curl for health check
-USER root
-RUN apk add --no-cache curl
-USER appuser
-
-# Health check
+# Health check using wget instead of curl
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
 # Run the application with JVM optimizations
 CMD ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]

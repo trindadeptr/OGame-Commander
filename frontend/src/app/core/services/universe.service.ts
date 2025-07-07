@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Universe, CreateUniverseRequest } from '../models';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UniverseService {
-  private apiUrl = '/api/universes';
+  private apiUrl = `${environment.apiUrl}/universes`;
 
   constructor(private http: HttpClient) {}
 
