@@ -1,6 +1,6 @@
 # OGame Commander Frontend
 
-A modern Angular 20 frontend application for the OGame Commander automation system. This application provides a comprehensive web interface for managing OGame bots, tasks, users, and universes.
+A modern Angular 17 frontend application for the OGame Commander automation system featuring a professional dark theme and comprehensive management interfaces. **Status: 90% Complete**
 
 ## 🚀 Features
 
@@ -36,32 +36,37 @@ A modern Angular 20 frontend application for the OGame Commander automation syst
 
 ## 🎨 Design & UX
 
-### Modern UI Components
-- **Tailwind CSS v4**: Latest utility-first CSS framework
-- **Responsive Design**: Mobile-first approach with responsive grids
-- **Status Badges**: Color-coded indicators for various states
-- **Loading States**: Smooth loading spinners and indicators
-- **Error Handling**: User-friendly error messages and validation
+### Modern Dark Theme UI
+- **Professional Dark Theme**: Gray-800/900 color scheme with excellent contrast
+- **Sidebar Navigation**: Left sidebar with icons and role-based menu items
+- **Header Component**: Top bar with user info, admin badge, and logout
+- **Metric Cards**: Statistics cards with colored icons and real-time data
+- **Status Indicators**: Color-coded badges for various system states
+- **Loading States**: Smooth loading spinners and transition effects
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 
-### Navigation
-- **Responsive Navbar**: Collapsible mobile menu
-- **Role-based Navigation**: Different menu items based on user role
-- **Active Route Highlighting**: Visual indication of current page
+### Navigation & Layout
+- **Sidebar Layout**: Professional left sidebar navigation
+- **Role-based Menus**: Different menu items for USER/ADMIN roles
+- **Admin Badges**: Visual indicators for admin-only features
+- **Responsive Collapse**: Mobile-friendly navigation patterns
 
 ## 🛠 Technical Stack
 
-- **Framework**: Angular 20 with standalone components
-- **Styling**: Tailwind CSS v4
+- **Framework**: Angular 17 with standalone components
+- **Styling**: TailwindCSS with dark theme customization
 - **Forms**: Reactive Forms with validation
 - **HTTP Client**: Angular HttpClient with interceptors
-- **Routing**: Angular Router with lazy loading
+- **Routing**: Angular Router with guards and lazy loading
 - **State Management**: Services with RxJS observables
-- **Build System**: Angular CLI with esbuild
+- **Build System**: Angular CLI with ESBuild
+- **Authentication**: JWT token management
+- **UI Components**: Custom components with TailwindCSS
 
 ## 📦 Prerequisites
 
 - Node.js 18+ and npm
-- Angular CLI 20+
+- Angular CLI 17+
 - Backend API running on `http://localhost:8080`
 
 ## 🚀 Quick Start
@@ -117,16 +122,18 @@ src/
 │   ├── core/                 # Core services, guards, models
 │   │   ├── guards/           # Authentication & authorization guards
 │   │   ├── models/           # TypeScript interfaces & types
-│   │   └── services/         # HTTP services for API communication
+│   │   ├── services/         # HTTP services for API communication
+│   │   └── interceptors/     # HTTP interceptors
 │   ├── features/             # Feature modules
-│   │   ├── auth/             # Authentication (login)
-│   │   ├── bots/             # Bot management
-│   │   ├── tasks/            # Task management
-│   │   ├── users/            # User management
-│   │   └── universes/        # Universe management
+│   │   ├── auth/login/       # Authentication (login)
+│   │   ├── bots/bot-list/    # Bot monitoring dashboard
+│   │   ├── tasks/            # Task management (list, detail, create)
+│   │   ├── users/user-list/  # User management (admin only)
+│   │   └── universes/universe-list/  # Universe management (admin only)
 │   ├── layout/               # Layout components
-│   │   └── navbar/           # Navigation component
-│   └── app.component.ts      # Root component
+│   │   ├── sidebar/          # Navigation sidebar
+│   │   └── header/           # Top header component
+│   └── app.component.ts      # Root component with new layout
 ├── styles.css                # Global styles with Tailwind
 └── index.html                # HTML entry point
 ```
