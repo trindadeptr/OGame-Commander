@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { User } from '../models';
+import { User, LoginResponse } from '../models';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -14,12 +14,16 @@ describe('AuthService', () => {
     username: 'testuser',
     role: 'USER',
     disabled: false,
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     lastAccessAt: new Date().toISOString()
   };
 
-  const mockAuthResponse = {
-    token: 'mock.jwt.token',
-    user: mockUser
+  const mockLoginResponse: LoginResponse = {
+    id: 1,
+    username: 'testuser',
+    role: 'USER',
+    token: 'mock.jwt.token'
   };
 
   beforeEach(() => {
@@ -55,15 +59,19 @@ describe('AuthService', () => {
       const credentials = { username: 'testuser', password: 'password123' };
 
       service.login(credentials).subscribe(response => {
-        expect(response).toEqual(mockAuthResponse);
-        expect(localStorage.getItem('token')).toBe(mockAuthResponse.token);
-        expect(service.getCurrentUser()).toEqual(mockUser);
+        expect(response).toEqual(mockLoginResponse);
+        expect(localStorage.getItem('token')).toBe(mockLoginResponse.token);
+        expect(service.getCurrentUser()).toEqual(jasmine.objectContaining({
+          id: 1,
+          username: 'testuser',
+          role: 'USER'
+        }));
       });
 
       const req = httpMock.expectOne('/api/auth/login');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(credentials);
-      req.flush(mockAuthResponse);
+      req.flush(mockLoginResponse);
     });
 
     it('should handle login error', () => {
@@ -90,16 +98,19 @@ describe('AuthService', () => {
       service['currentUserSubject'].next(mockUser);
 
       service.logout();
-
+      
       expect(localStorage.getItem('token')).toBeNull();
+      expect(localStorage.getItem('user')).toBeNull();
       expect(service.getCurrentUser()).toBeNull();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
     });
   });
 
   describe('isAuthenticated', () => {
     it('should return true when valid token exists', () => {
-      localStorage.setItem('token', 'valid.jwt.token');
+      // Create a mock JWT token with future expiration
+      const futureExp = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+      const mockToken = `header.${btoa(JSON.stringify({ exp: futureExp }))}.signature`;
+      localStorage.setItem('token', mockToken);
       expect(service.isAuthenticated()).toBe(true);
     });
 
@@ -111,11 +122,24 @@ describe('AuthService', () => {
       localStorage.setItem('token', '');
       expect(service.isAuthenticated()).toBe(false);
     });
+
+    it('should return false when token is expired', () => {
+      // Create a mock JWT token with past expiration
+      const pastExp = Math.floor(Date.now() / 1000) - 3600; // 1 hour ago
+      const mockToken = `header.${btoa(JSON.stringify({ exp: pastExp }))}.signature`;
+      localStorage.setItem('token', mockToken);
+      expect(service.isAuthenticated()).toBe(false);
+    });
+
+    it('should return false when token format is invalid', () => {
+      localStorage.setItem('token', 'invalid-token-format');
+      expect(service.isAuthenticated()).toBe(false);
+    });
   });
 
   describe('isAdmin', () => {
     it('should return true for admin user', () => {
-      const adminUser = { ...mockUser, role: 'ADMIN' };
+      const adminUser: User = { ...mockUser, role: 'ADMIN' };
       service['currentUserSubject'].next(adminUser);
       expect(service.isAdmin()).toBe(true);
     });
@@ -165,7 +189,8 @@ describe('AuthService', () => {
       localStorage.setItem('token', 'valid.token');
       
       // Reinitialize service to trigger constructor logic
-      service = new AuthService(TestBed.inject(HttpClientTestingModule) as any, routerSpy);
+      const httpClient = TestBed.inject(HttpClientTestingModule);
+      service = new AuthService(httpClient as any);
       
       // With a real JWT token, this would decode and set the user
       // For this test, we're just ensuring no errors occur

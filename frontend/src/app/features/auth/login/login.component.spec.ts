@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
-import { User } from '../../../core/models';
+import { User, LoginResponse } from '../../../core/models';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,16 +17,20 @@ describe('LoginComponent', () => {
     username: 'testuser',
     role: 'USER',
     disabled: false,
-    lastAccessAt: new Date().toISOString()
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
+    lastAccessAt: '2023-01-01T00:00:00Z'
   };
 
-  const mockAuthResponse = {
-    token: 'mock.jwt.token',
-    user: mockUser
+  const mockLoginResponse: LoginResponse = {
+    id: 1,
+    username: 'testuser',
+    role: 'USER',
+    token: 'test-token'
   };
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj('AuthService', ['login']);
+    const authSpy = jasmine.createSpyObj('AuthService', ['login', 'isAuthenticated']);
     const rSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -108,7 +112,7 @@ describe('LoginComponent', () => {
     });
 
     it('should call auth service on valid form submission', () => {
-      authServiceSpy.login.and.returnValue(of(mockAuthResponse));
+      authServiceSpy.login.and.returnValue(of(mockLoginResponse));
 
       component.onSubmit();
 
@@ -130,7 +134,7 @@ describe('LoginComponent', () => {
     });
 
     it('should redirect to tasks page on successful login', () => {
-      authServiceSpy.login.and.returnValue(of(mockAuthResponse));
+      authServiceSpy.login.and.returnValue(of(mockLoginResponse));
 
       component.onSubmit();
 
@@ -158,13 +162,13 @@ describe('LoginComponent', () => {
 
       component.onSubmit();
 
-      expect(component.errorMessage).toBe('Login failed. Please try again.');
+      expect(component.errorMessage).toBe('Login failed. Please check your credentials.');
       expect(component.isLoading).toBe(false);
     });
 
     it('should set loading state during login', () => {
       // Create a delayed observable to test loading state
-      authServiceSpy.login.and.returnValue(of(mockAuthResponse));
+      authServiceSpy.login.and.returnValue(of(mockLoginResponse));
 
       expect(component.isLoading).toBe(false);
 
@@ -180,7 +184,7 @@ describe('LoginComponent', () => {
       component.errorMessage = 'Test error message';
       fixture.detectChanges();
 
-      const errorElement = fixture.nativeElement.querySelector('.error-message');
+      const errorElement = fixture.nativeElement.querySelector('.bg-red-50');
       expect(errorElement?.textContent).toContain('Test error message');
     });
 

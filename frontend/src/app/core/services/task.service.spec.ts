@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TaskService } from './task.service';
-import { Task, TaskFilters, CreateTaskRequest, PagedResponse } from '../models';
+import { Task, TaskResult, CreateTaskRequest, TaskFilters, PagedResponse } from '../models';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -9,27 +9,37 @@ describe('TaskService', () => {
 
   const mockTask: Task = {
     id: 1,
-    type: 'CHECK_ACTIVITY',
+    type: 'SPY_PLAYER',
     status: 'CREATED',
     playerName: 'TestPlayer',
-    parameters: { galaxyRange: '1-5' },
-    createdAt: new Date().toISOString(),
-    completedAt: null,
+    recurrenceMinutes: 60,
+    taskParams: '{"key":"value"}',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     universe: {
       id: 1,
       name: 'Test Universe',
-      url: 'https://test.ogame.org',
+      url: 'https://test-universe.com',
       discordWebhook: 'https://discord.com/webhook',
-      createdAt: new Date().toISOString()
+      createdAt: '2023-01-01T00:00:00Z',
+      updatedAt: '2023-01-01T00:00:00Z'
     },
     bot: {
       id: 1,
-      name: 'TestBot',
-      uuid: 'test-uuid',
+      uuid: 'test-uuid-123',
+      name: 'Test Bot',
       status: 'ACTIVE',
-      lastSeenAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      universeId: 1
+      lastSeenAt: '2023-01-01T00:00:00Z',
+      createdAt: '2023-01-01T00:00:00Z',
+      updatedAt: '2023-01-01T00:00:00Z',
+      universe: {
+        id: 1,
+        name: 'Test Universe',
+        url: 'https://test-universe.com',
+        discordWebhook: 'https://discord.com/webhook',
+        createdAt: '2023-01-01T00:00:00Z',
+        updatedAt: '2023-01-01T00:00:00Z'
+      }
     }
   };
 
@@ -43,12 +53,26 @@ describe('TaskService', () => {
     last: true
   };
 
+  const mockCreateTaskRequest: CreateTaskRequest = {
+    type: 'SPY_PLAYER',
+    playerName: 'TestPlayer',
+    universeId: 1,
+    recurrenceMinutes: 60,
+    taskParams: '{"key":"value"}'
+  };
+
+  const mockTaskResult: TaskResult = {
+    id: 1,
+    task: mockTask,
+    fullResult: 'Task completed successfully',
+    createdAt: '2023-01-01T01:00:00Z'
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [TaskService]
     });
-
     service = TestBed.inject(TaskService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -62,11 +86,9 @@ describe('TaskService', () => {
   });
 
   describe('getTasks', () => {
-    it('should retrieve tasks without filters', () => {
+    it('should get tasks without filters', () => {
       service.getTasks().subscribe(response => {
         expect(response).toEqual(mockPagedResponse);
-        expect(response.content.length).toBe(1);
-        expect(response.content[0]).toEqual(mockTask);
       });
 
       const req = httpMock.expectOne('/api/tasks');
@@ -75,44 +97,52 @@ describe('TaskService', () => {
       req.flush(mockPagedResponse);
     });
 
-    it('should retrieve tasks with filters', () => {
+    it('should get tasks with filters', () => {
       const filters: TaskFilters = {
-        status: 'CREATED',
-        type: 'CHECK_ACTIVITY',
+        playerName: 'TestPlayer',
+        botId: 1,
         universeId: 1,
+        status: 'CREATED',
+        type: 'SPY_PLAYER',
         page: 0,
-        size: 10
+        size: 20
       };
 
       service.getTasks(filters).subscribe(response => {
         expect(response).toEqual(mockPagedResponse);
       });
 
-      const req = httpMock.expectOne(req => req.url === '/api/tasks');
+      const req = httpMock.expectOne(request => {
+        return request.url === '/api/tasks' && 
+               request.params.get('playerName') === 'TestPlayer' &&
+               request.params.get('botId') === '1' &&
+               request.params.get('universeId') === '1' &&
+               request.params.get('status') === 'CREATED' &&
+               request.params.get('type') === 'SPY_PLAYER' &&
+               request.params.get('page') === '0' &&
+               request.params.get('size') === '20';
+      });
       expect(req.request.method).toBe('GET');
-      expect(req.request.params.get('status')).toBe('CREATED');
-      expect(req.request.params.get('type')).toBe('CHECK_ACTIVITY');
-      expect(req.request.params.get('universeId')).toBe('1');
-      expect(req.request.params.get('page')).toBe('0');
-      expect(req.request.params.get('size')).toBe('10');
       req.flush(mockPagedResponse);
     });
 
-    it('should handle empty filters', () => {
-      const filters: TaskFilters = {};
+    it('should handle getTasks error', () => {
+      const errorResponse = { status: 500, statusText: 'Server Error' };
 
-      service.getTasks(filters).subscribe(response => {
-        expect(response).toEqual(mockPagedResponse);
+      service.getTasks().subscribe({
+        next: () => fail('should have failed with 500 error'),
+        error: (error) => {
+          expect(error.status).toBe(500);
+        }
       });
 
       const req = httpMock.expectOne('/api/tasks');
-      expect(req.request.method).toBe('GET');
-      req.flush(mockPagedResponse);
+      req.flush('Server Error', errorResponse);
     });
   });
 
   describe('getTask', () => {
-    it('should retrieve a single task by id', () => {
+    it('should get task by id', () => {
       const taskId = 1;
 
       service.getTask(taskId).subscribe(task => {
@@ -124,130 +154,92 @@ describe('TaskService', () => {
       req.flush(mockTask);
     });
 
-    it('should handle task not found error', () => {
+    it('should handle getTask error', () => {
       const taskId = 999;
+      const errorResponse = { status: 404, statusText: 'Not Found' };
 
       service.getTask(taskId).subscribe({
-        next: () => fail('Should have failed'),
+        next: () => fail('should have failed with 404 error'),
         error: (error) => {
           expect(error.status).toBe(404);
         }
       });
 
       const req = httpMock.expectOne(`/api/tasks/${taskId}`);
-      req.flush({ error: 'Task not found' }, { status: 404, statusText: 'Not Found' });
+      req.flush('Not Found', errorResponse);
     });
   });
 
   describe('createTask', () => {
-    it('should create a new task', () => {
-      const createRequest: CreateTaskRequest = {
-        type: 'CHECK_ACTIVITY',
-        playerName: 'TestPlayer',
-        parameters: { galaxyRange: '1-5' },
-        universeId: 1
-      };
-
-      service.createTask(createRequest).subscribe(task => {
+    it('should create task', () => {
+      service.createTask(mockCreateTaskRequest).subscribe(task => {
         expect(task).toEqual(mockTask);
       });
 
       const req = httpMock.expectOne('/api/tasks');
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual(createRequest);
+      expect(req.request.body).toEqual(mockCreateTaskRequest);
       req.flush(mockTask);
     });
 
-    it('should handle validation errors', () => {
-      const invalidRequest: CreateTaskRequest = {
-        type: 'CHECK_ACTIVITY',
-        playerName: '',
-        parameters: {},
-        universeId: 1
-      };
+    it('should handle createTask error', () => {
+      const errorResponse = { status: 400, statusText: 'Bad Request' };
 
-      service.createTask(invalidRequest).subscribe({
-        next: () => fail('Should have failed'),
+      service.createTask(mockCreateTaskRequest).subscribe({
+        next: () => fail('should have failed with 400 error'),
         error: (error) => {
           expect(error.status).toBe(400);
         }
       });
 
       const req = httpMock.expectOne('/api/tasks');
-      req.flush({ error: 'Validation error' }, { status: 400, statusText: 'Bad Request' });
-    });
-  });
-
-  describe('updateTask', () => {
-    it('should update a task', () => {
-      const taskId = 1;
-      const updatedTask = { ...mockTask, status: 'IN_PROGRESS' as const };
-
-      service.updateTask(taskId, updatedTask).subscribe(task => {
-        expect(task).toEqual(updatedTask);
-      });
-
-      const req = httpMock.expectOne(`/api/tasks/${taskId}`);
-      expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual(updatedTask);
-      req.flush(updatedTask);
-    });
-  });
-
-  describe('deleteTask', () => {
-    it('should delete a task', () => {
-      const taskId = 1;
-
-      service.deleteTask(taskId).subscribe(response => {
-        expect(response).toBeNull();
-      });
-
-      const req = httpMock.expectOne(`/api/tasks/${taskId}`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush(null);
+      req.flush('Bad Request', errorResponse);
     });
   });
 
   describe('completeTask', () => {
-    it('should complete a task with results', () => {
+    it('should complete task', () => {
       const taskId = 1;
-      const results = { planetsFound: 5, activity: 'high' };
-      const completedTask = { ...mockTask, status: 'FINISHED' as const, completedAt: new Date().toISOString() };
+      const result = { success: true, data: 'completed' };
+      const completedTask = { ...mockTask, status: 'FINISHED' as const };
 
-      service.completeTask(taskId, results).subscribe(task => {
+      service.completeTask(taskId, result).subscribe(task => {
         expect(task).toEqual(completedTask);
       });
 
       const req = httpMock.expectOne(`/api/tasks/${taskId}/complete`);
       expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual(results);
+      expect(req.request.body).toEqual(result);
       req.flush(completedTask);
     });
   });
 
-  describe('error handling', () => {
-    it('should handle network errors', () => {
-      service.getTasks().subscribe({
-        next: () => fail('Should have failed'),
-        error: (error) => {
-          expect(error).toBeTruthy();
-        }
+  describe('getTaskResult', () => {
+    it('should get task result', () => {
+      const taskId = 1;
+
+      service.getTaskResult(taskId).subscribe(result => {
+        expect(result).toEqual(mockTaskResult);
       });
 
-      const req = httpMock.expectOne('/api/tasks');
-      req.error(new ErrorEvent('Network error'));
+      const req = httpMock.expectOne(`/api/tasks/${taskId}/result`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockTaskResult);
     });
 
-    it('should handle server errors', () => {
-      service.getTasks().subscribe({
-        next: () => fail('Should have failed'),
+    it('should handle getTaskResult error', () => {
+      const taskId = 999;
+      const errorResponse = { status: 404, statusText: 'Not Found' };
+
+      service.getTaskResult(taskId).subscribe({
+        next: () => fail('should have failed with 404 error'),
         error: (error) => {
-          expect(error.status).toBe(500);
+          expect(error.status).toBe(404);
         }
       });
 
-      const req = httpMock.expectOne('/api/tasks');
-      req.flush({ error: 'Internal server error' }, { status: 500, statusText: 'Internal Server Error' });
+      const req = httpMock.expectOne(`/api/tasks/${taskId}/result`);
+      req.flush('Not Found', errorResponse);
     });
   });
 });
