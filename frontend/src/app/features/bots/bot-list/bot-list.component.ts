@@ -14,8 +14,8 @@ import { Bot } from '../../../core/models';
           <h1 class="text-3xl font-bold text-white">Bot Monitoring</h1>
           <p class="text-gray-400 mt-1">Monitor and manage your OGame automation bots</p>
         </div>
-        <button 
-          (click)="refreshBots()" 
+        <button
+          (click)="refreshBots()"
           [disabled]="isLoading"
           class="btn-primary">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@ import { Bot } from '../../../core/models';
             </div>
           </div>
         </div>
-        
+
         <div class="metric-card">
           <div class="flex items-center justify-between">
             <div>
@@ -54,7 +54,7 @@ import { Bot } from '../../../core/models';
             </div>
           </div>
         </div>
-        
+
         <div class="metric-card">
           <div class="flex items-center justify-between">
             <div>
@@ -68,7 +68,7 @@ import { Bot } from '../../../core/models';
             </div>
           </div>
         </div>
-        
+
         <div class="metric-card">
           <div class="flex items-center justify-between">
             <div>
@@ -126,32 +126,33 @@ import { Bot } from '../../../core/models';
                 <label class="block text-sm font-medium text-gray-400 mb-1">Universe</label>
                 <p class="text-gray-200">{{ bot.universe.name }}</p>
               </div>
-              
+
               <div>
                 <label class="block text-sm font-medium text-gray-400 mb-1">UUID</label>
                 <p class="text-gray-200 font-mono text-sm break-all">{{ bot.uuid }}</p>
               </div>
-              
+
               <div>
                 <label class="block text-sm font-medium text-gray-400 mb-1">Last Seen</label>
                 <p class="text-gray-200 text-sm">
-                  {{ bot.lastSeenAt | date:'medium' }}
-                  <span class="text-gray-400">({{ getTimeSinceLastSeen(bot.lastSeenAt) }})</span>
+                  <span *ngIf="bot.lastSeenAt; else neverSeen">
+                    {{ bot.lastSeenAt | date:'medium' }}
+                    <span class="text-gray-400">({{ getTimeSinceLastSeen(bot.lastSeenAt) }})</span>
+                  </span>
+                  <ng-template #neverSeen>
+                    <span class="text-gray-500">Never</span>
+                  </ng-template>
                 </p>
               </div>
-              
+
               <div>
                 <label class="block text-sm font-medium text-gray-400 mb-1">Created</label>
                 <p class="text-gray-200 text-sm">{{ bot.createdAt | date:'medium' }}</p>
               </div>
-              
+
               <div>
                 <label class="block text-sm font-medium text-gray-400 mb-1">Universe URL</label>
-                <a [href]="bot.universe.url" 
-                   target="_blank" 
-                   class="text-blue-400 hover:text-blue-300 text-sm break-all">
-                  {{ bot.universe.url }}
-                </a>
+                <p class="text-gray-200 text-sm">{{ bot.universe.url }}</p>
               </div>
             </div>
           </div>
@@ -196,7 +197,7 @@ export class BotListComponent implements OnInit {
     const lastSeen = new Date(lastSeenAt);
     const now = new Date();
     const diffMs = now.getTime() - lastSeen.getTime();
-    
+
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -230,8 +231,8 @@ export class BotListComponent implements OnInit {
     if (!this.bots) return 0;
     // Assuming working bots are those that are active and have been seen recently (within 10 minutes)
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-    return this.bots.filter(bot => 
-      bot.status === 'ACTIVE' && 
+    return this.bots.filter(bot =>
+      bot.status === 'ACTIVE' &&
       new Date(bot.lastSeenAt) > tenMinutesAgo
     ).length;
   }
