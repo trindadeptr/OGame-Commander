@@ -55,6 +55,7 @@ import { AuthService } from '../../../core/services/auth.service';
                 name="username"
                 type="text"
                 formControlName="username"
+                autocomplete="off"
                 required
                 class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter your username">
@@ -70,6 +71,7 @@ import { AuthService } from '../../../core/services/auth.service';
                 name="password"
                 type="password"
                 formControlName="password"
+                autocomplete="off"
                 required
                 class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter your password">
