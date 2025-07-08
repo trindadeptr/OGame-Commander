@@ -136,7 +136,7 @@ import { Task, Bot, Universe, TaskFilters, PagedResponse } from '../../../core/m
       </div>
 
       <!-- Tasks Content -->
-      <div *ngIf="!isLoading && tasks.length === 0" class="card">
+      <div *ngIf="!isLoading && tasks && tasks.length === 0" class="card">
         <div class="flex flex-col items-center justify-center py-12">
           <svg class="w-16 h-16 text-gray-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -147,7 +147,7 @@ import { Task, Bot, Universe, TaskFilters, PagedResponse } from '../../../core/m
       </div>
       
       <!-- Tasks Table -->
-      <div *ngIf="!isLoading && tasks.length > 0" class="card">
+      <div *ngIf="!isLoading && tasks && tasks.length > 0" class="card">
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-600">
             <thead class="bg-gray-700">
@@ -400,14 +400,14 @@ export class TaskListComponent implements OnInit {
   }
 
   getInProgressTasks(): number {
-    return this.tasks.filter(task => task.status === 'IN_PROGRESS').length;
+    return this.tasks?.filter(task => task.status === 'IN_PROGRESS').length || 0;
   }
 
   getCompletedTasks(): number {
-    return this.tasks.filter(task => task.status === 'FINISHED').length;
+    return this.tasks?.filter(task => task.status === 'FINISHED').length || 0;
   }
 
   getFailedTasks(): number {
-    return this.tasks.filter(task => task.status === 'ERROR').length;
+    return this.tasks?.filter(task => task.status === 'ERROR').length || 0;
   }
 }

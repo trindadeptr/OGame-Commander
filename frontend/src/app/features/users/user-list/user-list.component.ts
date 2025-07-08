@@ -57,8 +57,19 @@ import { User, CreateUserRequest, UpdateUserRequest } from '../../../core/models
         </div>
       </div>
 
+      <!-- Empty State -->
+      <div *ngIf="users && users.length === 0" class="card">
+        <div class="flex flex-col items-center justify-center py-12">
+          <svg class="w-16 h-16 text-gray-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-400 mb-2">No users found</h3>
+          <p class="text-gray-500">Create your first user to get started</p>
+        </div>
+      </div>
+
       <!-- Users Table -->
-      <div class="card">
+      <div *ngIf="users && users.length > 0" class="card">
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-600">
             <thead class="bg-gray-700">

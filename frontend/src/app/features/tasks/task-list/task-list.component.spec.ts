@@ -337,4 +337,44 @@ describe('TaskListComponent', () => {
       expect(component.Math).toBe(Math);
     });
   });
+
+  describe('initial state handling', () => {
+    it('should handle undefined tasks in metrics methods', () => {
+      // Reset tasks to undefined to simulate initial state
+      component.tasks = undefined as any;
+      
+      expect(component.getInProgressTasks()).toBe(0);
+      expect(component.getCompletedTasks()).toBe(0);
+      expect(component.getFailedTasks()).toBe(0);
+    });
+
+    it('should handle template rendering before data loads', () => {
+      // Don't call ngOnInit to simulate component creation
+      component.isLoading = true;
+      component.tasks = undefined as any;
+      fixture.detectChanges();
+
+      // Should not throw errors
+      expect(() => fixture.detectChanges()).not.toThrow();
+    });
+
+    it('should handle metrics display before data loads', () => {
+      // Reset component state to simulate initial undefined state
+      component.tasks = undefined as any;
+      component.pageData = null;
+      
+      // Test that methods don't throw errors and return 0
+      expect(() => {
+        component.getTotalTasks();
+        component.getInProgressTasks();
+        component.getCompletedTasks();
+        component.getFailedTasks();
+      }).not.toThrow();
+      
+      expect(component.getTotalTasks()).toBe(0);
+      expect(component.getInProgressTasks()).toBe(0);
+      expect(component.getCompletedTasks()).toBe(0);
+      expect(component.getFailedTasks()).toBe(0);
+    });
+  });
 });

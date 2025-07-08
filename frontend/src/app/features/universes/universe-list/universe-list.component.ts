@@ -56,8 +56,19 @@ import { Universe, CreateUniverseRequest } from '../../../core/models';
         </div>
       </div>
 
+      <!-- Empty State -->
+      <div *ngIf="universes && universes.length === 0" class="card">
+        <div class="flex flex-col items-center justify-center py-12">
+          <svg class="w-16 h-16 text-gray-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-400 mb-2">No universes found</h3>
+          <p class="text-gray-500">Create your first universe to get started</p>
+        </div>
+      </div>
+
       <!-- Universe List -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngIf="universes && universes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let universe of universes" class="card">
           <div class="card-header">
             <div class="flex items-center justify-between">

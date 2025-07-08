@@ -30,7 +30,7 @@ import { Bot } from '../../../core/models';
         <div class="metric-card">
           <div class="flex items-center justify-between">
             <div>
-              <div class="metric-number">{{ bots.length }}</div>
+              <div class="metric-number">{{ bots.length || 0 }}</div>
               <div class="metric-label">Total Bots</div>
             </div>
             <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
@@ -95,7 +95,7 @@ import { Bot } from '../../../core/models';
       </div>
 
       <!-- Empty State -->
-      <div *ngIf="!isLoading && !errorMessage && bots.length === 0" class="card">
+      <div *ngIf="!isLoading && !errorMessage && bots && bots.length === 0" class="card">
         <div class="flex flex-col items-center justify-center py-12">
           <svg class="w-16 h-16 text-gray-500 mb-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -106,7 +106,7 @@ import { Bot } from '../../../core/models';
       </div>
 
       <!-- Bots Grid -->
-      <div *ngIf="!isLoading && !errorMessage && bots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngIf="!isLoading && !errorMessage && bots && bots.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let bot of bots" class="card">
           <div class="card-header">
             <div class="flex items-center justify-between">
@@ -213,19 +213,21 @@ export class BotListComponent implements OnInit {
   }
 
   getActiveBots(): number {
-    return this.bots.filter(bot => bot.status === 'ACTIVE').length;
+    return this.bots?.filter(bot => bot.status === 'ACTIVE').length || 0;
   }
 
   getInactiveBots(): number {
-    return this.bots.filter(bot => bot.status === 'INACTIVE').length;
+    return this.bots?.filter(bot => bot.status === 'INACTIVE').length || 0;
   }
 
   getUniqueUniverses(): number {
+    if (!this.bots) return 0;
     const universeIds = new Set(this.bots.map(bot => bot.universe.id));
     return universeIds.size;
   }
 
   getWorkingBots(): number {
+    if (!this.bots) return 0;
     // Assuming working bots are those that are active and have been seen recently (within 10 minutes)
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
     return this.bots.filter(bot => 

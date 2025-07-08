@@ -74,7 +74,7 @@ import { Task, TaskResult } from '../../../core/models';
                 
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Universe</label>
-                  <p class="text-gray-900">{{ task.universe.name }}</p>
+                  <p class="text-gray-900">{{ task.universe.name || 'Unknown' }}</p>
                 </div>
                 
                 <div>
@@ -139,21 +139,23 @@ import { Task, TaskResult } from '../../../core/models';
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <p class="text-gray-900">{{ task.universe.name }}</p>
+                  <p class="text-gray-900">{{ task.universe.name || 'Unknown' }}</p>
                 </div>
                 
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">URL</label>
                   <a [href]="task.universe.url" 
                      target="_blank" 
-                     class="text-blue-600 hover:text-blue-900 break-all">
+                     class="text-blue-600 hover:text-blue-900 break-all"
+                     *ngIf="task.universe.url">
                     {{ task.universe.url }}
                   </a>
+                  <span *ngIf="!task.universe.url" class="text-gray-500">No URL available</span>
                 </div>
                 
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Discord Webhook</label>
-                  <p class="text-gray-900 break-all">{{ task.universe.discordWebhook }}</p>
+                  <p class="text-gray-900 break-all">{{ task.universe.discordWebhook || 'Not configured' }}</p>
                 </div>
               </div>
             </div>
@@ -168,12 +170,12 @@ import { Task, TaskResult } from '../../../core/models';
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <p class="text-gray-900">{{ task.bot.name }}</p>
+                  <p class="text-gray-900">{{ task.bot.name || 'Unknown' }}</p>
                 </div>
                 
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">UUID</label>
-                  <p class="text-gray-900 font-mono text-sm">{{ task.bot.uuid }}</p>
+                  <p class="text-gray-900 font-mono text-sm">{{ task.bot.uuid || 'N/A' }}</p>
                 </div>
                 
                 <div>
@@ -183,7 +185,7 @@ import { Task, TaskResult } from '../../../core/models';
                           'bg-green-100 text-green-800': task.bot.status === 'ACTIVE',
                           'bg-gray-100 text-gray-800': task.bot.status === 'INACTIVE'
                         }">
-                    {{ task.bot.status }}
+                    {{ task.bot.status || 'Unknown' }}
                   </span>
                 </div>
                 
@@ -203,16 +205,16 @@ import { Task, TaskResult } from '../../../core/models';
               </h2>
             </div>
             <div class="card-body">
-              <div *ngIf="taskResult.errorMessage" class="mb-4">
+              <div *ngIf="taskResult?.errorMessage" class="mb-4">
                 <label class="block text-sm font-medium text-red-700 mb-2">Error Message</label>
                 <div class="bg-red-50 border border-red-200 p-4 rounded-md">
                   <p class="text-red-700">{{ taskResult.errorMessage }}</p>
                 </div>
               </div>
               
-              <div *ngIf="taskResult.fullResult">
+              <div *ngIf="taskResult?.fullResult">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Full Result</label>
-                <pre class="bg-gray-50 p-4 rounded-md overflow-x-auto text-sm max-h-96">{{ formatJson(taskResult.fullResult) }}</pre>
+                <pre class="bg-gray-50 p-4 rounded-md overflow-x-auto text-sm max-h-96">{{ formatJson(taskResult.fullResult!) }}</pre>
               </div>
               
               <div class="mt-4">
